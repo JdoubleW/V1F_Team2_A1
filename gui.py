@@ -1,29 +1,54 @@
 from tkinter import *
 
-
-
 root = Tk()
-label0 = Label(master=root, text='Vul uw station in: ', background='yellow', height=2)
-label0.pack()
 
-entry = Entry(master=root)
-entry.pack(padx=10, pady=5)
+mainmenu = Frame(master=root)
+mainmenu.pack(fill="both", expand=True)
+label = Label(master=root,
+               text='Welkom bij NS',
+               background='yellow',
+               foreground='blue',
+               font=('', 40, ''),
+               width=40,
+               height=12)
 
+button1 = Button(master=root,
+                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                foreground='white',
+                background='blue',
+                width=20,
+                height=4)
 
+button2 = Button(master=root,
+                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                foreground='white',
+                background='blue',
+                width=20,
+                height=4)
 
-label1 = Label(master=root, height=2)
-label1.pack()
+button3 = Button(master=root,
+                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                foreground='white',
+                background='blue',
+                width=20,
+                height=4)
 
-label2 = Label(master=root, height=2)
-label2.pack()
+button4 = Button(master=root,
+                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                foreground='white',
+                background='blue',
+                width=20,
+                height=4)
 
-label3 = Label(master=root, height=2)
-label3.pack()
-
-label4 = Label(master=root, height=2)
-label4.pack()
-
-label5 = Label(master=root, height=2)
-label5.pack()
-
+button_dutch = Button(master=root,
+                foreground='white',
+                background='blue',
+                width=20,
+                height=4)
+label.pack()
+button1.place(x=310, y=550)
+button2.place(x=480, y=550)
+button3.place(x=650, y=550)
+button4.place(x=820, y=550)
+button_dutch.place(y=655)
 root.mainloop()
