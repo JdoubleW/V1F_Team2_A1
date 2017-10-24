@@ -24,12 +24,12 @@ def clickedNL():
 
 
 root = Tk()
-mainframeNL = Frame(master=root)          #Start mainframe van Nederlands
+mainframeNL = Frame(master=root, width=200, height=100)          #Start mainframe van Nederlands
 mainframeNL.pack(fill="both", expand=True)
 
 label = Label(master=mainframeNL,
-               text='Welkom bij NS',
-               background='yellow',
+               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+               background='#FFF760',
                foreground='#3333FF',
                font=('', 40, ''),
                width=40,
@@ -43,7 +43,7 @@ button1 = Button(master=mainframeNL,
                 height=4)
 
 button2 = Button(master=mainframeNL,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Weergeef vertrektijden \n van een ander treinstation',
                 foreground='white',
                 background='#3333FF',
                 width=20,
@@ -69,7 +69,6 @@ engels = PhotoImage(file="ENG.gif")
 tmi_eng = engels.subsample(3,3)
 button_ENG.config(image=tmi_eng)
 
-
 label.pack()
 button1.place(x=310, y=550)
 button2.place(x=480, y=550)
@@ -83,8 +82,8 @@ mainframeENG = Frame(master=root) #Start mainframe van Engels
 mainframeENG.pack(fill="both", expand=True)
 
 label = Label(master=mainframeENG,
-               text='Welcome to NS',
-               background='yellow',
+               text='Welcome to NS. \n Here you can find the current travel information \n of all the train stations in the Netherlands.',
+               background='#FFF760',
                foreground='#3333FF',
                font=('', 40, ''),
                width=40,
@@ -98,21 +97,21 @@ button1 = Button(master=mainframeENG,
                 height=4)
 
 button2 = Button(master=mainframeENG,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Show departure times \n from an other trainstation',
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
 button3 = Button(master=mainframeENG,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Show departure times \n from Utrecht Centraal',
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
 button4 = Button(master=mainframeENG,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Show departure times \n from Utrecht Centraal',
                 foreground='white',
                 background='#3333FF',
                 width=20,
