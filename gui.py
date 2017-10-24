@@ -1,33 +1,36 @@
 from tkinter import *
+from connection import *
 from tkinter import ttk
+import xmltodict
+import requests
 
 def showMainFrameNL():
     """"Haal de frame van Engels weg en verplaats het met de frame van Nederlands"""
-    mainframeENG.pack_forget()
+    FunctieVertrektijdenZoekenFrame.pack_forget()
+    FunctieVertrektijdenUC.pack_forget()
     mainframeNL.pack()
 
-def showMainFrameENG():
-    """"Haal de frame van Nederlands weg en verplaats het met de frame van Engels"""
+def showVertrekTijdenUC():
     mainframeNL.pack_forget()
-    mainframeENG.pack()
+    FunctieVertrektijdenUC.pack()
 
-def clickedENG():
-    """"De functie showMainFrameENG wordt geactiveerd als er wordt geklikt op de knop."""
-    showMainFrameENG()
+def showVertrekTijdenZoeken():
+    mainframeNL.pack_forget()
+    FunctieVertrektijdenZoekenFrame.pack()
 
-def clickedNL():
-    """"De functie showMainFrameNL wordt geactiveerd als er wordt geklikt op de knop."""
-    showMainFrameNL()
+def clickedVertrek_TijdenUC():
+    showVertrekTijdenUC()
+
+def clickedVertrek_TijdenZoeken():
+    showVertrekTijdenZoeken()
 
 
 ##################################################################################
-
-
 root = Tk()
 mainframeNL = Frame(master=root, width=200, height=100)          #Start mainframe van Nederlands
 mainframeNL.pack(fill="both", expand=True)
 
-label = Label(master=mainframeNL,
+labelNL = Label(master=mainframeNL,
                text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
                background='#FFF760',
                foreground='#3333FF',
@@ -37,6 +40,7 @@ label = Label(master=mainframeNL,
 
 button1 = Button(master=mainframeNL,
                 text='Weergeef vertrektijden \n van Utrecht Centraal',
+                command=clickedVertrek_TijdenUC,
                 foreground='white',
                 background='#3333FF',
                 width=20,
@@ -44,98 +48,72 @@ button1 = Button(master=mainframeNL,
 
 button2 = Button(master=mainframeNL,
                 text='Weergeef vertrektijden \n van een ander treinstation',
+                command=clickedVertrek_TijdenZoeken,
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
 button3 = Button(master=mainframeNL,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Reisplanner',
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
 button4 = Button(master=mainframeNL,
-                text='Weergeef vertrektijden \n van Utrecht Centraal',
+                text='Storingen',
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
-button_ENG = ttk.Button(master=mainframeNL,
-                command=clickedENG)
-engels = PhotoImage(file="ENG.gif")
-tmi_eng = engels.subsample(3,3)
-button_ENG.config(image=tmi_eng)
-
-label.pack()
+labelNL.pack()
 button1.place(x=310, y=550)
 button2.place(x=480, y=550)
 button3.place(x=650, y=550)
 button4.place(x=820, y=550)
-button_ENG.place()
-
 ##################################################################################
+FunctieVertrektijdenUC = Frame(master=root, width=200, height=100)          #Start mainframe van Nederlands
+FunctieVertrektijdenUC.pack(fill="both", expand=True)
 
-mainframeENG = Frame(master=root) #Start mainframe van Engels
-mainframeENG.pack(fill="both", expand=True)
-
-label = Label(master=mainframeENG,
-               text='Welcome to NS. \n Here you can find the current travel information \n of all the train stations in the Netherlands.',
+vertrektijdenUC = Label(master=FunctieVertrektijdenUC,
+               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
                background='#FFF760',
                foreground='#3333FF',
                font=('', 40, ''),
                width=40,
                height=12)
 
-button1 = Button(master=mainframeENG,
-                text='Show departure times \n from Utrecht Centraal',
-                foreground='white',
-                background='#3333FF',
-                width=20,
-                height=4)
 
-button2 = Button(master=mainframeENG,
-                text='Show departure times \n from an other trainstation',
-                foreground='white',
-                background='#3333FF',
-                width=20,
-                height=4)
+terugknop = Button(master=FunctieVertrektijdenUC, text='Vorige', command=showMainFrameNL)
+terugknop.pack(padx=30, pady=20)
 
-button3 = Button(master=mainframeENG,
-                text='Show departure times \n from Utrecht Centraal',
-                foreground='white',
-                background='#3333FF',
-                width=20,
-                height=4)
+FunctieVertrektijdenUC.pack()
+vertrektijdenUC
 
-button4 = Button(master=mainframeENG,
-                text='Show departure times \n from Utrecht Centraal',
-                foreground='white',
-                background='#3333FF',
-                width=20,
-                height=4)
+##################################################################################
 
-button_NL = Button(master=mainframeENG,
-                command=clickedNL,
-                background='#3333FF',
-                width=10,
-                height=4)
+FunctieVertrektijdenZoekenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van Nederlands
+FunctieVertrektijdenZoekenFrame.pack(fill="both", expand=True)
 
-button_NL = ttk.Button(master=mainframeENG,
-                command=clickedNL)
-nederlands = PhotoImage(file="NL.gif")
-tmi_nl = nederlands.subsample(3,3)
-button_NL.config(image=tmi_nl)
+vertrektijdenzoeken = Label(master=FunctieVertrektijdenZoekenFrame,
+               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+               background='#FFF760',
+               foreground='#3333FF',
+               font=('', 40, ''),
+               width=40,
+               height=12)
 
+zoekveld = Entry(master=FunctieVertrektijdenZoekenFrame)
+zoekveld.pack(padx=20, pady=20)
+zoekknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Zoek')
+zoekknop.pack(padx=10, pady=20)
+terugknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Vorige', command=showMainFrameNL)
+terugknop.pack(padx=30, pady=20)
 
-label.pack()
-button1.place(x=310, y=550)
-button2.place(x=480, y=550)
-button3.place(x=650, y=550)
-button4.place(x=820, y=550)
-button_ENG.place(x=0, y=655)
-button_NL.place(x=0, y=655)
+FunctieVertrektijdenZoekenFrame.pack()
+vertrektijdenzoeken
+
 showMainFrameNL()
 root.mainloop()
