@@ -1,15 +1,15 @@
 from tkinter import *
 from connection import *
-from tkinter import ttk
-import xmltodict
 import requests
+import xmltodict
 
 def showMainFrameNL():
     """"Haal de frame van Engels weg en verplaats het met de frame van Nederlands"""
     FunctieVertrektijdenZoekenFrame.pack_forget()
     FunctieVertrektijdenUC.pack_forget()
     FunctieReisplannerFrame.pack_forget()
-    FunctieStoringenFrame.pack_forget()
+    FunctieOngeplandeStoringenFrame.pack_forget()
+    FunctieGeplandeStoringenFrame.pack_forget()
     mainframeNL.pack()
 
 def showVertrekTijdenUC():
@@ -27,10 +27,15 @@ def showReisplanner():
     mainframeNL.pack_forget()
     FunctieReisplannerFrame.pack()
 
-def showStoringen():
+def showOngeplandeStoringen():
     """"Haal de mainframe weg en vervang het met de frame van de functie Storingen"""
     mainframeNL.pack_forget()
-    FunctieStoringenFrame.pack()
+    FunctieOngeplandeStoringenFrame.pack()
+
+def showGeplandeStoringen():
+    """"Haal de mainframe weg en vervang het met de frame van de functie Storingen"""
+    mainframeNL.pack_forget()
+    FunctieGeplandeStoringenFrame.pack()
 
 def clickedVertrek_TijdenUC():
     """"Als er op de knop wordt gedrukt van Vertrek_TijdenUC, activeer dan de functie showVertrekTijden"""
@@ -44,9 +49,45 @@ def clickedReisplanner():
     """"Als er op de knop wordt gedrukt van Reisplanner, activeer dan de functie showReisplanner"""
     showReisplanner()
 
-def clickedStoringen():
+def clickedOngeplandeStoringen():
     """"Als er op de knop wordt gedrukt van Storingen, activeer dan de functie showStoringen"""
-    showStoringen()
+    showOngeplandeStoringen()
+
+def clickedGeplandeStoringen():
+    """"Als er op de knop wordt gedrukt van Storingen, activeer dan de functie showStoringen"""
+    showGeplandeStoringen()
+
+def TreinStationZoeken():
+    """"Maak verbinding met de api, kijk wat er staat ingevuld bij de zoekveld en plak dat in de url, haal dan de gegevens op"""
+    auth_details = ('kevin.brekelmans@student.hu.nl', 'z-Xst7CaonnKD2JBnFTrUji9OKI5Wp8wPs_lL-XTQzOgxpo3Cz52xg')
+    api_url = 'http://webservices.ns.nl/ns-api-avt?station='
+
+    treinstation = ZoekVeld.get()
+    response = requests.get(api_url + treinstation, auth=auth_details)
+
+    vertrekXML = xmltodict.parse(response.text)
+    if 'error' in vertrekXML.keys():
+        foutmelding = "Er is geen station gevonden genaamd " + treinstation
+        labelZoeken["text"] = foutmelding
+        return 'Er is geen station gevonden genaamd ' + treinstation
+    else:
+        lijst = []
+        fileZoeken_write = open('VertrektijdenZoeken.txt', 'w')
+        for vertrek in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']:
+            eindbestemming = vertrek['EindBestemming']
+            vertrektijd = vertrek['VertrekTijd']  # 2016-09-27T18:36:00+0200
+            vertrektijd = vertrektijd[11:16]  # 18:36
+            vervoerder = vertrek['Vervoerder']
+            vertrekspoor = vertrek['VertrekSpoor']['#text']
+
+            result = 'Om ' + vertrektijd + ' vertrekt een trein naar ' + eindbestemming + '. Vervoerder is ' + vervoerder + '. De trein vertrekt van spoor ' + vertrekspoor
+            lijst.append(result)
+            fileZoeken_write.write(result)
+
+            waarde = labelZoeken["text"] = lijst[0]
+
+        return waarde
+
 
 ###########################################################################################
 ########################      START  MAINFRAME       ######################################
@@ -88,18 +129,27 @@ button3 = Button(master=mainframeNL,
                 height=4)
 
 button4 = Button(master=mainframeNL,
-                text='Storingen',
-                command=clickedStoringen,
+                text='Ongeplande \n storingen',
+                command=clickedOngeplandeStoringen,
+                foreground='white',
+                background='#3333FF',
+                width=20,
+                height=4)
+
+button5 = Button(master=mainframeNL,
+                text='Geplande \n werkzaamheden',
+                command=clickedGeplandeStoringen,
                 foreground='white',
                 background='#3333FF',
                 width=20,
                 height=4)
 
 labelNL.pack()
-button1.place(x=310, y=550)
-button2.place(x=480, y=550)
-button3.place(x=650, y=550)
-button4.place(x=820, y=550)
+button1.place(x=220, y=550)
+button2.place(x=390, y=550)
+button3.place(x=560, y=550)
+button4.place(x=730, y=550)
+button5.place(x=900, y=550)
 ###########################################################################################
 ########################       EINDE MAINFRAME       ######################################
 ###########################################################################################
@@ -112,18 +162,19 @@ FunctieVertrektijdenUC = Frame(master=root, width=200, height=100)          #Sta
 FunctieVertrektijdenUC.pack(fill="both", expand=True)
 
 vertrektijdenUC = Label(master=FunctieVertrektijdenUC,
-               text='{}'.format(stations()),
+               text='{} \n'.format(stations()),
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 30, ''),
-               width=55,
+               font=('', 20, ''),
+               width=100,
                height=12)
 
 vertrektijdenUC.pack()
 terugknopUC = Button(master=FunctieVertrektijdenUC, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF', width=20, height=4)
 
-terugknopUC.pack(padx=30, pady=20)
+terugknopUC.pack(padx=100, pady=20)
+terugknopUC.place(x=0, y=325)
 FunctieVertrektijdenUC.pack()
 
 ###########################################################################################
@@ -134,29 +185,41 @@ FunctieVertrektijdenUC.pack()
 ################  BEGIN FRAME VAN FUNCTIE VERTREKTIJDEN ZOEKEN   ##########################
 ###########################################################################################
 
-
-
 FunctieVertrektijdenZoekenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Vertrektijden zoeken
 FunctieVertrektijdenZoekenFrame.pack(fill="both", expand=True)
 
-vertrektijdenzoeken = Label(master=FunctieVertrektijdenZoekenFrame,
-               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+vertrektijdenzoeken1 = Label(master=FunctieVertrektijdenZoekenFrame,
+               text='Voer station in:',
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 40, ''),
-               width=40,
-               height=12)
+               font=('', 20, ''),
+               width=80,
+               height=10)
+vertrektijdenzoeken1.pack()
 
-zoekveld = Entry(master=FunctieVertrektijdenZoekenFrame)
-zoekveld.pack(padx=20, pady=20)
-zoekknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Zoek')
+labelZoeken = Label(master=FunctieVertrektijdenZoekenFrame,
+               text='',
+               background='#FFF760',
+               foreground='#3333FF',
+               font=('', 20, ''),
+               width=80,
+               height=10)
+labelZoeken.pack()
+
+ZoekVeld = Entry(master=FunctieVertrektijdenZoekenFrame)
+ZoekVeld.pack(padx=20, pady=20)
+zoekknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Zoek', command=TreinStationZoeken)
 zoekknop.pack(padx=10, pady=20)
 terugknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
 terugknop.pack(padx=30, pady=20)
 
 FunctieVertrektijdenZoekenFrame.pack()
-vertrektijdenzoeken
+ZoekVeld.place(x=580, y=200)
+zoekknop.place(x=630, y=250)
+terugknop.place(x=0, y=580)
+vertrektijdenzoeken1
+labelZoeken
 
 ###########################################################################################
 ################  EINDE FRAME VAN FUNCTIE VERTREKTIJDEN ZOEKEN   ##########################
@@ -189,12 +252,12 @@ reisplanner
 ###########################################################################################
 
 ###########################################################################################
-#########################  BEGIN FRAME VAN FUNCTIE STORINGEN   ##########################
+################  BEGIN FRAME VAN FUNCTIE ONGEPLANDE STORINGEN   ##########################
 ###########################################################################################
-FunctieStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
-FunctieStoringenFrame.pack(fill="both", expand=True)
+FunctieOngeplandeStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
+FunctieOngeplandeStoringenFrame.pack(fill="both", expand=True)
 
-storingen = Label(master=FunctieStoringenFrame,
+storingen = Label(master=FunctieOngeplandeStoringenFrame,
                text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
                background='#FFF760',
                foreground='#3333FF',
@@ -203,15 +266,39 @@ storingen = Label(master=FunctieStoringenFrame,
                height=12)
 
 
-terugknop = Button(master=FunctieStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
+terugknop = Button(master=FunctieOngeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
 terugknop.pack(padx=30, pady=20)
 
-FunctieStoringenFrame.pack()
-storingen
+FunctieOngeplandeStoringenFrame.pack()
 
 ###########################################################################################
-#########################  EINDE FRAME VAN FUNCTIE REISPLANNER   ##########################
+##############  EINDE FRAME VAN FUNCTIE ONGEPLANDE STORINGEN     ##########################
+###########################################################################################
+
+###########################################################################################
+##################  BEGIN FRAME VAN FUNCTIE GEPLANDE STORINGEN   ##########################
+###########################################################################################
+FunctieGeplandeStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
+FunctieGeplandeStoringenFrame.pack(fill="both", expand=True)
+
+storingen = Label(master=FunctieGeplandeStoringenFrame,
+               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+               background='#FFF760',
+               foreground='#3333FF',
+               font=('', 40, ''),
+               width=40,
+               height=12)
+
+
+terugknop = Button(master=FunctieGeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
+                   foreground='white', background='#3333FF',width=20, height=4)
+terugknop.pack(padx=30, pady=20)
+
+FunctieGeplandeStoringenFrame.pack()
+
+###########################################################################################
+################  EINDE FRAME VAN FUNCTIE GEPLANDE STORINGEN     ##########################
 ###########################################################################################
 showMainFrameNL()
 root.mainloop()
