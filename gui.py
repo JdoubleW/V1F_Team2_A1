@@ -86,14 +86,13 @@ def TreinStationZoeken():
             lijst.append(result)
             fileZoeken_write.write(result)
             waarde = labelZoeken["text"] = lijst[0:6]
-            test = list(waarde)
 
             continue
         fileZoeken_write.close()
         fileZoeken_read = open('VertrektijdenZoeken.txt', 'r')
         linelist = fileZoeken_read.read()
-        print(type(test))
-        return test
+
+        return waarde
 
 
 ###########################################################################################
