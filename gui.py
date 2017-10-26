@@ -1,5 +1,7 @@
 from tkinter import *
 from connection import *
+from ongeplande_storingen import *
+from geplande_storingen import *
 import requests
 import xmltodict
 
@@ -73,20 +75,25 @@ def TreinStationZoeken():
     else:
         lijst = []
         fileZoeken_write = open('VertrektijdenZoeken.txt', 'w')
-        for vertrek in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']:
+        for vertrek in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein'][:5]:
             eindbestemming = vertrek['EindBestemming']
             vertrektijd = vertrek['VertrekTijd']  # 2016-09-27T18:36:00+0200
             vertrektijd = vertrektijd[11:16]  # 18:36
             vervoerder = vertrek['Vervoerder']
             vertrekspoor = vertrek['VertrekSpoor']['#text']
 
-            result = 'Om ' + vertrektijd + ' vertrekt een trein naar ' + eindbestemming + '. Vervoerder is ' + vervoerder + '. De trein vertrekt van spoor ' + vertrekspoor
+            result = 'Om ' + vertrektijd + ' vertrekt een trein naar ' + eindbestemming + '. Vervoerder is ' + vervoerder + '. De trein vertrekt van spoor ' + vertrekspoor + '\n'
             lijst.append(result)
             fileZoeken_write.write(result)
+            waarde = labelZoeken["text"] = lijst[0:6]
+            test = list(waarde)
 
-            waarde = labelZoeken["text"] = lijst[0]
-
-        return waarde
+            continue
+        fileZoeken_write.close()
+        fileZoeken_read = open('VertrektijdenZoeken.txt', 'r')
+        linelist = fileZoeken_read.read()
+        print(type(test))
+        return test
 
 
 ###########################################################################################
@@ -252,28 +259,28 @@ reisplanner
 ###########################################################################################
 
 ###########################################################################################
-################  BEGIN FRAME VAN FUNCTIE ONGEPLANDE STORINGEN   ##########################
+################  BEGIN FRAME VAN FUNCTIE ONGEPLANDE STORINGEN UC   #######################
 ###########################################################################################
 FunctieOngeplandeStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
 FunctieOngeplandeStoringenFrame.pack(fill="both", expand=True)
 
 storingen = Label(master=FunctieOngeplandeStoringenFrame,
-               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+               text='{}'.format(ongepland_storingen()),
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 40, ''),
-               width=40,
-               height=12)
-
+               font=('', 14, ''),
+               width=140,
+               height=33)
+storingen.pack()
 
 terugknop = Button(master=FunctieOngeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
-terugknop.pack(padx=30, pady=20)
+terugknop.pack(padx=0, pady=20)
 
 FunctieOngeplandeStoringenFrame.pack()
-
+terugknop.place(x=0, y=660)
 ###########################################################################################
-##############  EINDE FRAME VAN FUNCTIE ONGEPLANDE STORINGEN     ##########################
+##############  EINDE FRAME VAN FUNCTIE ONGEPLANDE STORINGEN UC  ##########################
 ###########################################################################################
 
 ###########################################################################################
@@ -283,13 +290,13 @@ FunctieGeplandeStoringenFrame = Frame(master=root, width=200, height=100)       
 FunctieGeplandeStoringenFrame.pack(fill="both", expand=True)
 
 storingen = Label(master=FunctieGeplandeStoringenFrame,
-               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
+               text='{}'.format(gepland_storingen()),
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 40, ''),
-               width=40,
-               height=12)
-
+               font=('', 14, ''),
+               width=140,
+               height=33)
+storingen.pack()
 
 terugknop = Button(master=FunctieGeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
