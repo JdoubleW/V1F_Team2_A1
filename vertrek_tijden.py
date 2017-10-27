@@ -19,11 +19,11 @@ def stations():
             vertrektijd = vertrek['VertrekTijd']  # 2016-09-27T18:36:00+0200
             vertrektijd = vertrektijd[11:16]  # 18:36
             vervoerder = vertrek['Vervoerder']
+            vertrekspoor = vertrek['VertrekSpoor']['#text']
 
-
-            result = 'Om ' + vertrektijd + ' vertrekt een trein naar ' + eindbestemming + '. Vervoerder is ' + vervoerder
+            result = 'Om ' + vertrektijd + ' vertrekt een trein naar ' + eindbestemming + '. Vervoerder is ' + vervoerder + '. De trein vertrekt van spoor ' + vertrekspoor
             lijst.append(result)
-        return lijst
+        return lijst[0]
 
 
 print(stations())
