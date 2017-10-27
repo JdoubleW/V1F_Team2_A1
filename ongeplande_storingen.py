@@ -3,7 +3,7 @@ import xmltodict
 
 def ongepland_storingen():
     auth_details = ('jannes.faber@student.hu.nl', 'V-sJnmzQn-O_1WsoRJ29fYEecL0hR7glXdadb2FjK91DEZQ6Fh5Iiw')
-    api_url = 'http://webservices.ns.nl/ns-api-storingen?station=Utrecht Centraal'
+    api_url = 'http://webservices.ns.nl/ns-api-storingen?station=Utrecht Centraal&actual=true&planned=true'
 
     response = requests.get(api_url, auth=auth_details)
 
