@@ -9,7 +9,6 @@ def showMainFrameNL():
     """"Haal de frame van Engels weg en verplaats het met de frame van Nederlands"""
     FunctieVertrektijdenZoekenFrame.pack_forget()
     FunctieVertrektijdenUC.pack_forget()
-    FunctieReisplannerFrame.pack_forget()
     FunctieOngeplandeStoringenFrame.pack_forget()
     FunctieGeplandeStoringenFrame.pack_forget()
     mainframeNL.pack()
@@ -23,11 +22,6 @@ def showVertrekTijdenZoeken():
     """"Haal de mainframe weg en vervang het met de frame van de functie Vertrektijdenzoeken"""
     mainframeNL.pack_forget()
     FunctieVertrektijdenZoekenFrame.pack()
-
-def showReisplanner():
-    """"Haal de mainframe weg en vervang het met de frame van de functie Reisplanner"""
-    mainframeNL.pack_forget()
-    FunctieReisplannerFrame.pack()
 
 def showOngeplandeStoringen():
     """"Haal de mainframe weg en vervang het met de frame van de functie Storingen"""
@@ -46,10 +40,6 @@ def clickedVertrek_TijdenUC():
 def clickedVertrek_TijdenZoeken():
     """"Als er op de knop wordt gedrukt van Vertrek_TijdenZoeken, activeer dan de functie showVertrekTijdenZoeken"""
     showVertrekTijdenZoeken()
-
-def clickedReisplanner():
-    """"Als er op de knop wordt gedrukt van Reisplanner, activeer dan de functie showReisplanner"""
-    showReisplanner()
 
 def clickedOngeplandeStoringen():
     """"Als er op de knop wordt gedrukt van Storingen, activeer dan de functie showStoringen"""
@@ -92,25 +82,34 @@ def TreinStationZoeken():
         fileZoeken_read = open('VertrektijdenZoeken.txt', 'r')
         linelist = fileZoeken_read.read()
 
-        return waarde
+        return result
 
 
 ###########################################################################################
 ########################      START  MAINFRAME       ######################################
 ###########################################################################################
 root = Tk()
-mainframeNL = Frame(master=root, width=200, height=100)          #Start mainframe van Nederlands
+root.geometry("1920x1080")
+mainframeNL = Frame(master=root, width=200, height=100)          #Start mainframe
 mainframeNL.pack(fill="both", expand=True)
 
 labelNL = Label(master=mainframeNL,
                text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 40, ''),
-               width=40,
-               height=12)
+               font=('', 30, ''),
+               width=80,
+               height=20)
 
-button1 = Button(master=mainframeNL,
+labelBlue = Label(master=mainframeNL,
+               text='Station: Utrecht Centraal',
+               background='#3333FF',
+               foreground='white',
+               font=('', 40, ''),
+               width=80,
+               height=1)
+
+button_vertrekUC = Button(master=mainframeNL,
                 text='Weergeef vertrektijden \n van Utrecht Centraal',
                 command=clickedVertrek_TijdenUC,
                 foreground='white',
@@ -118,7 +117,7 @@ button1 = Button(master=mainframeNL,
                 width=20,
                 height=4)
 
-button2 = Button(master=mainframeNL,
+button_vertrekZoeken = Button(master=mainframeNL,
                 text='Weergeef vertrektijden \n van een ander treinstation',
                 command=clickedVertrek_TijdenZoeken,
                 foreground='white',
@@ -126,15 +125,7 @@ button2 = Button(master=mainframeNL,
                 width=20,
                 height=4)
 
-button3 = Button(master=mainframeNL,
-                text='Reisplanner',
-                command=clickedReisplanner,
-                foreground='white',
-                background='#3333FF',
-                width=20,
-                height=4)
-
-button4 = Button(master=mainframeNL,
+button_ongeplandeStoring = Button(master=mainframeNL,
                 text='Ongeplande \n storingen',
                 command=clickedOngeplandeStoringen,
                 foreground='white',
@@ -142,7 +133,7 @@ button4 = Button(master=mainframeNL,
                 width=20,
                 height=4)
 
-button5 = Button(master=mainframeNL,
+button_geplandeStoring = Button(master=mainframeNL,
                 text='Geplande \n werkzaamheden',
                 command=clickedGeplandeStoringen,
                 foreground='white',
@@ -150,12 +141,12 @@ button5 = Button(master=mainframeNL,
                 width=20,
                 height=4)
 
+labelBlue.pack()
 labelNL.pack()
-button1.place(x=220, y=550)
-button2.place(x=390, y=550)
-button3.place(x=560, y=550)
-button4.place(x=730, y=550)
-button5.place(x=900, y=550)
+button_vertrekUC.place(x=430, y=550)
+button_vertrekZoeken.place(x=600, y=550)
+button_ongeplandeStoring.place(x=770, y=550)
+button_geplandeStoring.place(x=930, y=550)
 ###########################################################################################
 ########################       EINDE MAINFRAME       ######################################
 ###########################################################################################
@@ -171,16 +162,25 @@ vertrektijdenUC = Label(master=FunctieVertrektijdenUC,
                text='{} \n'.format(stations()),
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 20, ''),
-               width=100,
-               height=12)
+               font=('', 15, ''),
+               width=140,
+               height=40)
 
+labelBlue = Label(master=FunctieVertrektijdenUC,
+               text='Station: Utrecht Centraal',
+               background='#3333FF',
+               foreground='white',
+               font=('', 40, ''),
+               width=80,
+               height=1)
+
+labelBlue.pack()
 vertrektijdenUC.pack()
 terugknopUC = Button(master=FunctieVertrektijdenUC, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF', width=20, height=4)
 
 terugknopUC.pack(padx=100, pady=20)
-terugknopUC.place(x=0, y=325)
+terugknopUC.place(x=0, y=730)
 FunctieVertrektijdenUC.pack()
 
 ###########################################################################################
@@ -194,67 +194,48 @@ FunctieVertrektijdenUC.pack()
 FunctieVertrektijdenZoekenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Vertrektijden zoeken
 FunctieVertrektijdenZoekenFrame.pack(fill="both", expand=True)
 
+labelBlue = Label(master=FunctieVertrektijdenZoekenFrame,
+               text='Station: Utrecht Centraal',
+               background='#3333FF',
+               foreground='white',
+               font=('', 40, ''),
+               width=80,
+               height=1)
+labelBlue.pack()
 vertrektijdenzoeken1 = Label(master=FunctieVertrektijdenZoekenFrame,
                text='Voer station in:',
                background='#FFF760',
                foreground='#3333FF',
                font=('', 20, ''),
-               width=80,
-               height=10)
+               width=140,
+               height=2)
 vertrektijdenzoeken1.pack()
 
 labelZoeken = Label(master=FunctieVertrektijdenZoekenFrame,
                text='',
                background='#FFF760',
                foreground='#3333FF',
-               font=('', 20, ''),
-               width=80,
-               height=10)
+               font=('', 15, ''),
+               width=140,
+               height=30)
 labelZoeken.pack()
 
 ZoekVeld = Entry(master=FunctieVertrektijdenZoekenFrame)
 ZoekVeld.pack(padx=20, pady=20)
-zoekknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Zoek', command=TreinStationZoeken)
+zoekknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Zoek', command=TreinStationZoeken,
+                  foreground = 'white', background = '#3333FF', width = 20, height = 4)
 zoekknop.pack(padx=10, pady=20)
 terugknop = Button(master=FunctieVertrektijdenZoekenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
 terugknop.pack(padx=30, pady=20)
 
 FunctieVertrektijdenZoekenFrame.pack()
-ZoekVeld.place(x=580, y=200)
-zoekknop.place(x=630, y=250)
-terugknop.place(x=0, y=580)
-vertrektijdenzoeken1
-labelZoeken
+ZoekVeld.place(x=700, y=150)
+zoekknop.place(x=688, y=200)
+terugknop.place(x=0, y=730)
 
 ###########################################################################################
 ################  EINDE FRAME VAN FUNCTIE VERTREKTIJDEN ZOEKEN   ##########################
-###########################################################################################
-
-###########################################################################################
-#########################  BEGIN FRAME VAN FUNCTIE REISPLANNER   ##########################
-###########################################################################################
-FunctieReisplannerFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Reisplanner
-FunctieReisplannerFrame.pack(fill="both", expand=True)
-
-reisplanner = Label(master=FunctieReisplannerFrame,
-               text='Welkom bij NS. \n Hier vindt u de meest recente reisinformatie \n van alle stations in Nederland.',
-               background='#FFF760',
-               foreground='#3333FF',
-               font=('', 40, ''),
-               width=40,
-               height=12)
-
-
-terugknop = Button(master=FunctieReisplannerFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
-                   foreground='white', background='#3333FF',width=20, height=4)
-terugknop.pack(padx=30, pady=20)
-
-FunctieReisplannerFrame.pack()
-reisplanner
-
-###########################################################################################
-#########################  EINDE FRAME VAN FUNCTIE REISPLANNER   ##########################
 ###########################################################################################
 
 ###########################################################################################
@@ -263,13 +244,22 @@ reisplanner
 FunctieOngeplandeStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
 FunctieOngeplandeStoringenFrame.pack(fill="both", expand=True)
 
+labelBlue = Label(master=FunctieOngeplandeStoringenFrame,
+               text='Station: Utrecht Centraal',
+               background='#3333FF',
+               foreground='white',
+               font=('', 40, ''),
+               width=80,
+               height=1)
+labelBlue.pack()
+
 storingen = Label(master=FunctieOngeplandeStoringenFrame,
                text='{}'.format(ongepland_storingen()),
                background='#FFF760',
                foreground='#3333FF',
                font=('', 14, ''),
                width=140,
-               height=33)
+               height=50)
 storingen.pack()
 
 terugknop = Button(master=FunctieOngeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
@@ -277,7 +267,7 @@ terugknop = Button(master=FunctieOngeplandeStoringenFrame, text='Terug naar \n h
 terugknop.pack(padx=0, pady=20)
 
 FunctieOngeplandeStoringenFrame.pack()
-terugknop.place(x=0, y=660)
+terugknop.place(x=0, y=730)
 ###########################################################################################
 ##############  EINDE FRAME VAN FUNCTIE ONGEPLANDE STORINGEN UC  ##########################
 ###########################################################################################
@@ -288,21 +278,30 @@ terugknop.place(x=0, y=660)
 FunctieGeplandeStoringenFrame = Frame(master=root, width=200, height=100)          #Start mainframe van functie Storingen
 FunctieGeplandeStoringenFrame.pack(fill="both", expand=True)
 
+labelBlue = Label(master=FunctieGeplandeStoringenFrame,
+               text='Station: Utrecht Centraal',
+               background='#3333FF',
+               foreground='white',
+               font=('', 40, ''),
+               width=80,
+               height=1)
+labelBlue.pack()
+
 storingen = Label(master=FunctieGeplandeStoringenFrame,
                text='{}'.format(gepland_storingen()),
                background='#FFF760',
                foreground='#3333FF',
                font=('', 14, ''),
                width=140,
-               height=33)
+               height=50)
 storingen.pack()
 
 terugknop = Button(master=FunctieGeplandeStoringenFrame, text='Terug naar \n hoofdscherm', command=showMainFrameNL,
                    foreground='white', background='#3333FF',width=20, height=4)
-terugknop.pack(padx=30, pady=20)
+terugknop.pack(padx=0, pady=20)
 
 FunctieGeplandeStoringenFrame.pack()
-
+terugknop.place(x=0, y=730)
 ###########################################################################################
 ################  EINDE FRAME VAN FUNCTIE GEPLANDE STORINGEN     ##########################
 ###########################################################################################
